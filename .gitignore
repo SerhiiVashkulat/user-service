@@ -18,6 +18,13 @@ target/
 *.iws
 *.iml
 *.ipr
+*.log
+*.bak
+*.tmp
+out/
+.idea-workspace.xml
+.idea-workspace/
+.idea_caches/
 
 ### NetBeans ###
 /nbproject/private/
