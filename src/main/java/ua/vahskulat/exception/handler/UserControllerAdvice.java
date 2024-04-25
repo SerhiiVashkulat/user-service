@@ -99,7 +99,7 @@ public class UserControllerAdvice {
         return ResponseEntity.badRequest()
                 .body(new ErrorResponseAPI(
                         ErrorTitle.VALIDATION_ERROR.getError()
-                        ,exception.getMessage()
+                        ,detail
                         ,request.getRequestURI()
                         , LocalDateTime.now()
                 ));

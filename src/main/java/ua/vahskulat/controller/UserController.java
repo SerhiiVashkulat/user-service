@@ -41,7 +41,7 @@ public class UserController {
                 .ok()
                 .body(UserResponseAPI.<UserResponseDto>builder()
                         .data(userMapper.toDTO(userService.getUserById(id)))
-                        .path(request.getRequestURI() + "/" +  id)
+                        .path(request.getRequestURI())
                         .build());
 
     }
@@ -120,6 +120,7 @@ public class UserController {
         return ResponseEntity
                 .ok(UserResponseAPI.<List<UserResponseDto>>builder()
                         .data(userMapper.toListDTO(userPage.getContent()))
+                        .countElements(userPage.getNumberOfElements())
                         .totalElements(userPage.getTotalElements())
                         .path(request.getRequestURI())
                         .build());

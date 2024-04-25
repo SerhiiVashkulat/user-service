@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void deleteUser(Long id) {
-        log.info(" Delete user with id: {}", id);
+        log.info(" Deleting user with id: {}", id);
         userRepository.delete(findUserById(id));
     }
 
@@ -67,6 +67,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public User updateUser(Long id, User user) {
         validationUserEmail(user.getEmail());
 
@@ -92,9 +93,12 @@ public class UserServiceImpl implements UserService {
 
 
     private void validationUserAge(User user) {
-        if (minAgeUser >= Period.between(user.getBirthDate(), LocalDate.now()).getYears()) {
-            log.error(" The user {} {} is under 18 years old . ", user.getFirstName(), user.getLastName());
-            throw new UserWrongAgeException(" User must be at least 18 years old ");
+        Period age = Period.between(user.getBirthDate(), LocalDate.now());
+        int minAgeInDays = minAgeUser * 365;
+
+        if (age.getDays() + age.getMonths() * 30 + age.getYears() * 365 < minAgeInDays) {
+            log.error("The user {} {} is under 18 years old.", user.getFirstName(), user.getLastName());
+            throw new UserWrongAgeException("User must be at least 18 years old");
         }
     }
 
