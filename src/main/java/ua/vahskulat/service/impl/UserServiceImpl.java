@@ -84,7 +84,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Cacheable(cacheNames ="user-cache", key = "{#from, #to, #pageable}")
+    @Cacheable(cacheNames = "user-cache", key = "{#from, #to, #pageable}")
     public Page<User> getUsersByBirthDateRange(LocalDate from, LocalDate to, Pageable pageable) {
         validateDateRange(from, to);
         log.info(" Finding users by birth date from {} to {}", from, to);
@@ -127,12 +127,12 @@ public class UserServiceImpl implements UserService {
 
     private User findUserById(Long id) {
         log.info("Finding user by ID: {}", id);
-        return userRepository.findById(id)
-                .orElseThrow(() -> {
-                    log.error(" User whit id: {} not found ", id);
-                    return new UserNotFoundException(" User with this " + id + " not found ");
-                });
+        return userRepository.findById(id).orElseThrow(() -> {
+            log.error(" User whit id: {} not found ", id);
+            return new UserNotFoundException(" User with this " + id + " not found ");
+        });
     }
+
     private void validateUser(User user) {
         validationDate(user.getBirthDate());
 

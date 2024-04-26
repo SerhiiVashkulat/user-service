@@ -37,6 +37,7 @@ public class UserController {
     public ResponseEntity<UserResponseAPI<UserResponseDto>> userById(@Positive @PathVariable Long id
             , HttpServletRequest request) {
         log.info("Received request to get user with ID: {}", id);
+
         return ResponseEntity
                 .ok()
                 .body(UserResponseAPI.<UserResponseDto>builder()
@@ -53,6 +54,7 @@ public class UserController {
         log.info(" Received request to create user: {} ", userCreateRequestDTO);
         User user = userService.createUser(userMapper.toUser(userCreateRequestDTO));
         log.info(" User created successfully ");
+
         return ResponseEntity.
                 created(URI.create(request.getRequestURI() + "/" + user.getId()))
                 .body(UserResponseAPI.<UserResponseDto>builder()
@@ -65,14 +67,15 @@ public class UserController {
             (@PathVariable @Positive Long id, @Valid @RequestBody UserUpdateRequestDto updateUser
                     , HttpServletRequest request) {
         log.info(" Received request to update user first name: {} and last name : {} with ID: {}"
-                , updateUser.firstName(),updateUser.lastName(), id);
-        User user = userService.updateUserNames(id,updateUser.firstName(),updateUser.lastName());
+                , updateUser.firstName(), updateUser.lastName(), id);
+        User user = userService.updateUserNames(id, updateUser.firstName(), updateUser.lastName());
         log.info(" User first name and last name updated successfully ");
+
         return ResponseEntity
                 .ok()
                 .body(UserResponseAPI.<UserResponseDto>builder()
                         .data(userMapper.toDTO(user))
-                        .path(request.getRequestURI() + "/" + user.getId())
+                        .path(request.getRequestURI())
                         .build());
 
     }
@@ -84,20 +87,21 @@ public class UserController {
         log.info(" Received request to update user with id: {}", id);
         User user = userService.updateUser(id, userMapper.toUser(userCreateRequestDTO));
         log.info(" User updated successfully ");
+
         return ResponseEntity.ok()
                 .body(UserResponseAPI.<UserResponseDto>builder()
                         .data(userMapper.toDTO(user))
-                        .path(request.getRequestURI() + "/" +  user.getId())
+                        .path(request.getRequestURI())
                         .build());
 
     }
 
     @DeleteMapping("/{id}")
-
     public ResponseEntity<Void> deleteUser(@PathVariable @Positive Long id) {
         log.info(" Received request to delete user with id: {}", id);
         userService.deleteUser(id);
         log.info(" User deleted successfully ");
+
         return ResponseEntity
                 .noContent()
                 .build();
@@ -112,8 +116,8 @@ public class UserController {
             LocalDate toDate
             , @RequestParam(name = "page", defaultValue = "0", required = false) int page
             , @RequestParam(name = "size", defaultValue = "10", required = false) int size
-            ,HttpServletRequest request) {
-        log.info(" Received request to find all user by date range from: {} - to: {} ",fromDate,toDate );
+            , HttpServletRequest request) {
+        log.info(" Received request to find all user by date range from: {} - to: {} ", fromDate, toDate);
         Pageable pageable = PageRequest.of(page, size);
         Page<User> userPage = userService.getUsersByBirthDateRange(fromDate, toDate, pageable);
 

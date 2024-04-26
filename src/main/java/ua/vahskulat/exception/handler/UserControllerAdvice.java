@@ -27,8 +27,8 @@ public class UserControllerAdvice {
         return ResponseEntity.badRequest()
                 .body(new ErrorResponseAPI(
                         ErrorTitle.WRONG_DATE.getError()
-                        ,exception.getMessage()
-                        ,request.getRequestURI()
+                        , exception.getMessage()
+                        , request.getRequestURI()
                         , LocalDateTime.now()
                 ));
     }
@@ -40,8 +40,8 @@ public class UserControllerAdvice {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(new ErrorResponseAPI(
                         ErrorTitle.USER_NOT_FOUND.getError()
-                        ,exception.getMessage()
-                        ,request.getRequestURI()
+                        , exception.getMessage()
+                        , request.getRequestURI()
                         , LocalDateTime.now()
                 ));
 
@@ -55,8 +55,8 @@ public class UserControllerAdvice {
         return ResponseEntity.badRequest()
                 .body(new ErrorResponseAPI(
                         ErrorTitle.INVALID_QUERY_PARAMETER.getError()
-                        ,exception.getMessage()
-                        ,request.getRequestURI()
+                        , exception.getMessage()
+                        , request.getRequestURI()
                         , LocalDateTime.now()
                 ));
 
@@ -66,12 +66,11 @@ public class UserControllerAdvice {
     public ResponseEntity<ErrorResponseAPI> handleUserWrongAgeException(UserWrongAgeException exception
             , HttpServletRequest request) {
 
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)//HttpStatus.UNPROCESSABLE_ENTITY
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
                 .body(new ErrorResponseAPI(
                         ErrorTitle.WRONG_AGE.getError()
-                        ,exception.getMessage()
-                        ,request.getRequestURI()
+                        , exception.getMessage()
+                        , request.getRequestURI()
                         , LocalDateTime.now()
                 ));
 
@@ -84,23 +83,23 @@ public class UserControllerAdvice {
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(new ErrorResponseAPI(
                         ErrorTitle.USER_EMAIL_EXIST.getError()
-                        ,exception.getMessage()
-                        ,request.getRequestURI()
+                        , exception.getMessage()
+                        , request.getRequestURI()
                         , LocalDateTime.now()
                 ));
 
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-
     public ResponseEntity<ErrorResponseAPI> handlerMethodArgumentNotValidException(MethodArgumentNotValidException exception
             , HttpServletRequest request) {
         String detail = Objects.requireNonNull(exception.getBindingResult().getFieldError().getDefaultMessage());
+
         return ResponseEntity.badRequest()
                 .body(new ErrorResponseAPI(
                         ErrorTitle.VALIDATION_ERROR.getError()
-                        ,detail
-                        ,request.getRequestURI()
+                        , detail
+                        , request.getRequestURI()
                         , LocalDateTime.now()
                 ));
     }

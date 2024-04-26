@@ -17,11 +17,8 @@ import ua.vahskulat.model.Address;
 import ua.vahskulat.model.User;
 import ua.vahskulat.repository.UserRepository;
 import ua.vahskulat.service.impl.UserServiceImpl;
-
 import java.time.LocalDate;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -53,10 +50,7 @@ class UserServiceTest {
 
         this.userUpdate = new User(1L, "example@gmail.com", "updateFN",
                 LocalDate.of(1991, 1, 13), "updateLN", address, phone);
-//        userList= new ArrayList<>();
-//        userList.add(userValid);
-//        pageable = PageRequest.of(0,10);
-//        pageList = new PageImpl<>(userList,pageable,userList.size());
+
     }
 
     @Test
@@ -73,6 +67,16 @@ class UserServiceTest {
         assertEquals(userResult.getLastName(), userValid.getLastName());
 
     }
+    @Test
+    void testCreateUser_ByWrongAge_ReturnUserWrongAgeException() {
+
+
+        when(userRepository.save(userInvalid)).thenThrow(UserWrongAgeException.class);
+        assertThrows(UserWrongAgeException.class, () -> userService.createUser(userInvalid));
+
+        verify(userRepository,never()).save(userValid);
+    }
+
 
     @Test
     void testCreateUser_ByEmailExist_ReturnUserEmailExistException() {
@@ -103,9 +107,7 @@ class UserServiceTest {
 
         Long id = 1L;
 
-        when(userRepository.findById(any(Long.class))).thenReturn(Optional.ofNullable(userValid));
-
-        doNothing().when(userRepository).delete(userValid);
+        when(userRepository.findById(id)).thenReturn(Optional.ofNullable(userValid));
 
         userService.deleteUser(id);
 
@@ -188,7 +190,6 @@ class UserServiceTest {
     @Test
     void testGetUsersByBirthDateRange_WrongDate_ReturnUserWrongDateException() {
 
-
         LocalDate from = LocalDate.of(3000, 1, 1);
         LocalDate to = LocalDate.of(2000, 1, 1);
         Pageable pageable = PageRequest.of(0, 10);
@@ -199,7 +200,6 @@ class UserServiceTest {
         verify(userRepository, never()).findUsersByBirthDateBetween(from, to, pageable);
 
     }
-
     @Test
     void testSearchUsersByBirthDateRange_ValidDate_ReturnListUsers() {
 
