@@ -14,7 +14,11 @@ How to start:
 
 2.1 Or use docker, enter command in terminal:
 
-	- docker compose up.
+	- docker compose up
+
+3. Connect to DB
+
+4. Run project 
 
 Api requests:
 
